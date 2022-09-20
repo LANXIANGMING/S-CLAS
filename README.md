@@ -6,17 +6,19 @@ An older version (BEPS-PAMS-CLASS) is currently hosted on [pavlovia.org](https:/
 
 ### Data Dictionary
 
-Variable                       | Description
-:----------------------------- | :---------------------------------------------
-trialChoiceMouse.clicked\_name | answer for choice question type
-trialTextTextbox.text          | answer for text question type
-taskName                       | task name (BEPS, PAMS, CLASS)
-slideNum                       | slide number
-qnNum                          | question number
-qnType                         | question type (choice or text)
-corrAns                        | correct answer
-audFile                        | audio file stem
-participant                    | participant name
-Audio                          | enable audio
-Debug                          | enable debug mode
+Variable       | Description
+:------------- | :---------------------------------------------
+expVersion     | experiment version (date last modified)
+response       | answer for chosen
+is\_correct    | correct (1) or incorrect (0)
+end\_timestamp | timestamp at the end of current trial
+total\_seconds | global time taken at the end of current trial (seconds)
+taskName       | S-CLAS
+slideNum       | slide number
+qnNum          | question number
+corrAns        | correct answer
+qnText         | question text
+ID             | subject ID
+Audio          | enable audio
+Debug          | enable debug mode
 
