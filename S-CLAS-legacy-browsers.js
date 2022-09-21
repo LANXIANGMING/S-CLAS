@@ -17,27 +17,33 @@ function make_img(name, file_name, pos, size, opacity) {
     return new visual.ImageStim({"win": psychoJS.window, "name": name, "image": file_name, "pos": pos, "size": size, "opacity": opacity});
 }
 
-function make_slide(num, pos = [0, 0], size = SLIDE_SIZE) {
-    return make_img(`slide-${num}`, `${SLIDES_DIR}/slide-${num}.png`, pos, size, 1);
+function make_slide(name, pos = [0, 0], size = SLIDE_SIZE) {
+    return make_img(name, `${SLIDES_DIR}/${name}.png`, pos, size, 1);
 }
 
-function make_rect(name, pos, size, opacity, fillColor = null, lineColor = "red", lineWidth = 3) {
-    return new visual.Rect({"win": psychoJS.window, "name": name, "width": size[0], "height": size[1], "pos": pos, "lineWidth": lineWidth, "lineColor": new util.Color(lineColor), "fillColor": fillColor, "opacity": opacity});
+var fillColor;
+var lineColor;
+function make_rect(name, pos, size, opacity, lineColor = "green", lineWidth = 3, fillColor = null) {
+    if ((fillColor !== null)) {
+        fillColor = new util.Color(fillColor);
+    }
+    if ((lineColor !== null)) {
+        lineColor = new util.Color(lineColor);
+    }
+    return new visual.Rect({"win": psychoJS.window, "name": name, "width": size[0], "height": size[1], "pos": pos, "lineWidth": lineWidth, "lineColor": lineColor, "fillColor": fillColor, "opacity": opacity});
 }
 
 var cimgs;
-function make_boxes(names, xys, sizes, opacity = CLICK_BOX_OPACITY) {
+function make_boxes(names, xys, sizes, opacity = CLICK_BOX_OPACITY, lineColor = "green") {
     var cimgs;
     cimgs = [];
     for (var i, _pj_c = 0, _pj_a = util.range(names.length), _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
         i = _pj_a[_pj_c];
-        cimgs.push(make_rect(names[i], xys[i], sizes[i], opacity));
+        cimgs.push(make_rect(names[i], xys[i], sizes[i], opacity, lineColor));
     }
     return cimgs;
 }
 
-var lineColor;
-var fillColor;
 function make_circle(name, pos, size, fillColor = "black", lineColor = "black", lineWidth = 3, opacity = 1) {
     if ((lineColor !== null)) {
         lineColor = new util.Color(lineColor);
@@ -68,6 +74,17 @@ function find_min_y(cimgs) {
         }
     }
     return min_y;
+}
+
+function make_radios(func, cimgs, res = [], offset = (- 0.05)) {
+    var min_y, radio_y;
+    min_y = find_min_y(cimgs);
+    for (var cimg, _pj_c = 0, _pj_a = cimgs, _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
+        cimg = _pj_a[_pj_c];
+        radio_y = (min_y + offset);
+        res.push(func(cimg.name, [cimg.pos[0], radio_y]));
+    }
+    return res;
 }
 
 // init psychoJS:
@@ -111,42 +128,42 @@ psychoJS.start({
   expName: expName,
   expInfo: expInfo,
   resources: [
+    {'name': 'resources/aud/Replay instructions.m4a', 'path': 'resources/aud/Replay instructions.m4a'},
+    {'name': 'resources/aud/S-CLAS Intro.m4a', 'path': 'resources/aud/S-CLAS Intro.m4a'},
+    {'name': 'resources/aud/S-CLAS Q01.m4a', 'path': 'resources/aud/S-CLAS Q01.m4a'},
+    {'name': 'resources/aud/S-CLAS Q02.m4a', 'path': 'resources/aud/S-CLAS Q02.m4a'},
+    {'name': 'resources/aud/S-CLAS Q03.m4a', 'path': 'resources/aud/S-CLAS Q03.m4a'},
+    {'name': 'resources/aud/S-CLAS Q04.m4a', 'path': 'resources/aud/S-CLAS Q04.m4a'},
+    {'name': 'resources/aud/S-CLAS Q05.m4a', 'path': 'resources/aud/S-CLAS Q05.m4a'},
+    {'name': 'resources/aud/S-CLAS Q06.m4a', 'path': 'resources/aud/S-CLAS Q06.m4a'},
+    {'name': 'resources/aud/S-CLAS Q07.m4a', 'path': 'resources/aud/S-CLAS Q07.m4a'},
+    {'name': 'resources/aud/S-CLAS Q08.m4a', 'path': 'resources/aud/S-CLAS Q08.m4a'},
+    {'name': 'resources/aud/S-CLAS Q09a.m4a', 'path': 'resources/aud/S-CLAS Q09a.m4a'},
     {'name': 'resources/aud/S-CLAS Q09b.m4a', 'path': 'resources/aud/S-CLAS Q09b.m4a'},
+    {'name': 'resources/aud/S-CLAS Q09c.m4a', 'path': 'resources/aud/S-CLAS Q09c.m4a'},
+    {'name': 'resources/aud/S-CLAS Q10.m4a', 'path': 'resources/aud/S-CLAS Q10.m4a'},
+    {'name': 'resources/aud/S-CLAS Q11.m4a', 'path': 'resources/aud/S-CLAS Q11.m4a'},
+    {'name': 'resources/aud/S-CLAS Q12.m4a', 'path': 'resources/aud/S-CLAS Q12.m4a'},
+    {'name': 'resources/aud/S-CLAS Q13.m4a', 'path': 'resources/aud/S-CLAS Q13.m4a'},
+    {'name': 'resources/aud/S-CLAS Q14.m4a', 'path': 'resources/aud/S-CLAS Q14.m4a'},
+    {'name': 'resources/imgs/slides/slide-01.png', 'path': 'resources/imgs/slides/slide-01.png'},
+    {'name': 'resources/imgs/slides/slide-02.png', 'path': 'resources/imgs/slides/slide-02.png'},
+    {'name': 'resources/imgs/slides/slide-03.png', 'path': 'resources/imgs/slides/slide-03.png'},
+    {'name': 'resources/imgs/slides/slide-04.png', 'path': 'resources/imgs/slides/slide-04.png'},
+    {'name': 'resources/imgs/slides/slide-05.png', 'path': 'resources/imgs/slides/slide-05.png'},
+    {'name': 'resources/imgs/slides/slide-06.png', 'path': 'resources/imgs/slides/slide-06.png'},
+    {'name': 'resources/imgs/slides/slide-07.png', 'path': 'resources/imgs/slides/slide-07.png'},
+    {'name': 'resources/imgs/slides/slide-08.png', 'path': 'resources/imgs/slides/slide-08.png'},
+    {'name': 'resources/imgs/slides/slide-09.png', 'path': 'resources/imgs/slides/slide-09.png'},
+    {'name': 'resources/imgs/slides/slide-10.png', 'path': 'resources/imgs/slides/slide-10.png'},
+    {'name': 'resources/imgs/slides/slide-11.png', 'path': 'resources/imgs/slides/slide-11.png'},
+    {'name': 'resources/imgs/slides/slide-12.png', 'path': 'resources/imgs/slides/slide-12.png'},
+    {'name': 'resources/imgs/slides/slide-13.png', 'path': 'resources/imgs/slides/slide-13.png'},
     {'name': 'resources/imgs/slides/slide-14.png', 'path': 'resources/imgs/slides/slide-14.png'},
     {'name': 'resources/imgs/slides/slide-15.png', 'path': 'resources/imgs/slides/slide-15.png'},
-    {'name': 'resources/aud/S-CLAS Intro.m4a', 'path': 'resources/aud/S-CLAS Intro.m4a'},
-    {'name': 'resources/aud/S-CLAS Q03.m4a', 'path': 'resources/aud/S-CLAS Q03.m4a'},
-    {'name': 'resources/imgs/slides/slide-02.png', 'path': 'resources/imgs/slides/slide-02.png'},
-    {'name': 'resources/aud/Replay instructions.m4a', 'path': 'resources/aud/Replay instructions.m4a'},
-    {'name': 'resources/aud/S-CLAS Q01.m4a', 'path': 'resources/aud/S-CLAS Q01.m4a'},
-    {'name': 'resources/aud/S-CLAS Q10.m4a', 'path': 'resources/aud/S-CLAS Q10.m4a'},
-    {'name': 'resources/seqs/conditions.csv', 'path': 'resources/seqs/conditions.csv'},
-    {'name': 'resources/imgs/slides/slide-12.png', 'path': 'resources/imgs/slides/slide-12.png'},
-    {'name': 'resources/aud/S-CLAS Q08.m4a', 'path': 'resources/aud/S-CLAS Q08.m4a'},
     {'name': 'resources/imgs/slides/slide-16.png', 'path': 'resources/imgs/slides/slide-16.png'},
-    {'name': 'resources/imgs/slides/slide-07.png', 'path': 'resources/imgs/slides/slide-07.png'},
-    {'name': 'resources/aud/S-CLAS Q11.m4a', 'path': 'resources/aud/S-CLAS Q11.m4a'},
-    {'name': 'resources/imgs/slides/slide-13.png', 'path': 'resources/imgs/slides/slide-13.png'},
-    {'name': 'resources/aud/S-CLAS Q07.m4a', 'path': 'resources/aud/S-CLAS Q07.m4a'},
-    {'name': 'resources/imgs/slides/slide-09.png', 'path': 'resources/imgs/slides/slide-09.png'},
     {'name': 'resources/imgs/slides/slide-17.png', 'path': 'resources/imgs/slides/slide-17.png'},
-    {'name': 'resources/imgs/slides/slide-05.png', 'path': 'resources/imgs/slides/slide-05.png'},
-    {'name': 'resources/imgs/slides/slide-11.png', 'path': 'resources/imgs/slides/slide-11.png'},
-    {'name': 'resources/imgs/slides/slide-01.png', 'path': 'resources/imgs/slides/slide-01.png'},
-    {'name': 'resources/aud/S-CLAS Q06.m4a', 'path': 'resources/aud/S-CLAS Q06.m4a'},
-    {'name': 'resources/aud/S-CLAS Q09a.m4a', 'path': 'resources/aud/S-CLAS Q09a.m4a'},
-    {'name': 'resources/aud/S-CLAS Q02.m4a', 'path': 'resources/aud/S-CLAS Q02.m4a'},
-    {'name': 'resources/imgs/slides/slide-04.png', 'path': 'resources/imgs/slides/slide-04.png'},
-    {'name': 'resources/aud/S-CLAS Q14.m4a', 'path': 'resources/aud/S-CLAS Q14.m4a'},
-    {'name': 'resources/imgs/slides/slide-08.png', 'path': 'resources/imgs/slides/slide-08.png'},
-    {'name': 'resources/imgs/slides/slide-10.png', 'path': 'resources/imgs/slides/slide-10.png'},
-    {'name': 'resources/aud/S-CLAS Q04.m4a', 'path': 'resources/aud/S-CLAS Q04.m4a'},
-    {'name': 'resources/aud/S-CLAS Q09c.m4a', 'path': 'resources/aud/S-CLAS Q09c.m4a'},
-    {'name': 'resources/aud/S-CLAS Q05.m4a', 'path': 'resources/aud/S-CLAS Q05.m4a'},
-    {'name': 'resources/imgs/slides/slide-06.png', 'path': 'resources/imgs/slides/slide-06.png'},
-    {'name': 'resources/imgs/slides/slide-03.png', 'path': 'resources/imgs/slides/slide-03.png'},
-    {'name': 'resources/aud/S-CLAS Q12.m4a', 'path': 'resources/aud/S-CLAS Q12.m4a'},
-    {'name': 'resources/aud/S-CLAS Q13.m4a', 'path': 'resources/aud/S-CLAS Q13.m4a'}
+    {'name': 'resources/seqs/conditions.csv', 'path': 'resources/seqs/conditions.csv'},
   ]
 });
 
@@ -180,6 +197,7 @@ var AUD_DIR;
 var IMGS_DIR;
 var SLIDES_DIR;
 var SEQ_FILE;
+var REPLAY_AUD_FILE;
 var USE_AUDIO;
 var SHOW_DEBUG;
 var CLICK_BOX_OPACITY;
@@ -201,17 +219,23 @@ var SOUND;
 var all_cimgs;
 var begin_text;
 var trialClock;
+var run_anim;
+var aimgs;
+var starts;
+var ends;
+var all_anims;
 var trial_text;
 var globalClock;
 var routineTimer;
 async function experimentInit() {
   // Initialize components for Routine "begin"
   beginClock = new util.Clock();
-  expVersion = "2022.09.20";
+  expVersion = "2022.09.21";
   AUD_DIR = "resources/aud";
   IMGS_DIR = "resources/imgs";
   SLIDES_DIR = `${IMGS_DIR}/slides`;
   SEQ_FILE = "resources/seqs/conditions.csv";
+  REPLAY_AUD_FILE = `${AUD_DIR}/Replay instructions.m4a`;
   USE_AUDIO = (expInfo["Audio"] === "Yes");
   SHOW_DEBUG = (expInfo["Debug"] === "Yes");
   CLICK_BOX_OPACITY = (SHOW_DEBUG ? 0.5 : 0);
@@ -230,12 +254,12 @@ async function experimentInit() {
   REPLAY_SIZE = [0.165, 0.075];
   REPLAY = make_rect("replay", REPLAY_POS, REPLAY_SIZE, CLICK_BOX_OPACITY);
   COVER_SIZE = [0.17, 0.08];
-  COVER = make_rect("cover", NEXT_POS, COVER_SIZE, null, "white", "white", 0);
+  COVER = make_rect("cover", NEXT_POS, COVER_SIZE, null, "white", 0, "white");
   MOUSE = new core.Mouse({"win": psychoJS.window});
   MOUSE_L = 0;
   MOUSE_L_prev = 0;
   SOUND = null;
-  all_cimgs = {"02": get_trees, "03": get_vehicles, "04": get_speed, "05": get_weight, "06": get_weather, "07": get_tools, "08": get_carrots, "09": get_badminton, "10": get_prepositions1, "11": get_prepositions2, "12": get_room1, "13": get_pen1, "14": get_pen2, "15": get_animals, "16": get_look, "17": get_mice};
+  all_cimgs = {"slide-02": get_trees, "slide-03": get_vehicles, "slide-04": get_speed, "slide-05": get_weight, "slide-06": get_weather, "slide-07": get_tools, "slide-08": get_carrots, "slide-09": get_badminton, "slide-10": get_prepositions1, "slide-11": get_prepositions2, "slide-12": get_room1, "slide-13": get_pen1, "slide-14": get_pen2, "slide-15": get_animals, "slide-16": get_look, "slide-17": get_mice};
   
   function get_trees() {
       var names, sizes, xys;
@@ -385,6 +409,76 @@ async function experimentInit() {
   
   // Initialize components for Routine "trial"
   trialClock = new util.Clock();
+  run_anim = false;
+  aimgs = null;
+  starts = null;
+  ends = null;
+  function anim_q03() {
+      var names, sizes, xys, y0;
+      names = ["box_cheetah", "box_tortoise"];
+      y0 = 0.042;
+      xys = [[(- 0.19), y0], [0.2, y0]];
+      sizes = [[0.34, 0.31], [0.31, 0.31]];
+      starts = [1.7, 4.2];
+      ends = [3.2, 5.7];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  function anim_q04() {
+      var names, sizes, xys, y0;
+      names = ["box_feather", "box_rock"];
+      y0 = 0.015;
+      xys = [[(- 0.228), y0], [0.175, y0]];
+      sizes = [[0.28, 0.34], [0.32, 0.34]];
+      starts = [2.3, 5.5];
+      ends = [4, 7];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  function anim_q08() {
+      var h0, names, sizes, xys, y0;
+      names = ["box_playing", "box_played"];
+      y0 = (- 0.252);
+      h0 = 0.105;
+      xys = [[(- 0.257), y0], [0.27, y0]];
+      sizes = [[0.42, h0], [0.39, h0]];
+      starts = [9.8, 18];
+      ends = [14, 22];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  function anim_q12() {
+      var h0, names, sizes, xys, y0;
+      names = ["box_monkey", "box_goose"];
+      y0 = (- 0.12);
+      h0 = 0.3;
+      xys = [[0.043, y0], [0.315, y0]];
+      sizes = [[0.2, h0], [0.28, h0]];
+      starts = [7.5, 11];
+      ends = [9.5, 12];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  function anim_q13() {
+      var h0, names, sizes, xys, y0;
+      names = ["box_leaf", "box_cup", "box_book"];
+      y0 = (- 0.13);
+      h0 = 0.22;
+      xys = [[(- 0.09), y0], [0.125, y0], [0.35, y0]];
+      sizes = [[0.16, h0], [0.15, h0], [0.21, h0]];
+      starts = [8.2, 11.4, 14.6];
+      ends = [9.7, 12.5, 15.7];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  function anim_q14() {
+      var h0, names, sizes, xys, y0;
+      names = ["box_car", "box_rice", "box_map"];
+      y0 = (- 0.135);
+      h0 = 0.2;
+      xys = [[(- 0.075), y0], [0.15, y0], [0.368, y0]];
+      sizes = [[0.23, h0], [0.18, h0], [0.2, h0]];
+      starts = [7.6, 10.6, 13.2];
+      ends = [8.8, 11.5, 14.2];
+      return [make_boxes(names, xys, sizes, 1, "red"), starts, ends];
+  }
+  all_anims = {"Q03": anim_q03, "Q04": anim_q04, "Q08": anim_q08, "Q12": anim_q12, "Q13": anim_q13, "Q14": anim_q14};
+  
   trial_text = new visual.TextStim({
     win: psychoJS.window,
     name: 'trial_text',
@@ -393,7 +487,7 @@ async function experimentInit() {
     units: undefined, 
     pos: [0.6, 0], height: 0.02,  wrapWidth: undefined, ori: 0.0,
     color: new util.Color('black'),  opacity: undefined,
-    depth: -1.0 
+    depth: -2.0 
   });
   
   // Create some handy timers
@@ -420,7 +514,7 @@ function beginRoutineBegin(snapshot) {
     frameN = -1;
     continueRoutine = true; // until we're told otherwise
     // update component parameters for each repeat
-    slide = make_slide("01");
+    slide = make_slide("slide-01");
     slide.autoDraw = true;
     NEXT.autoDraw = true;
     if (USE_AUDIO) {
@@ -560,13 +654,15 @@ async function trialsLoopEnd() {
 var cimg_names;
 var response;
 var has_responded;
+var replay_inst;
 var slide_num;
 var qn_num;
-var radio_y;
 var radio0s;
 var radio1s;
 var SOUND_DUR;
 var SOUND_START;
+var SLIDE_SOUND_START;
+var _pj;
 var trialComponents;
 function trialRoutineBegin(snapshot) {
   return async function () {
@@ -583,31 +679,29 @@ function trialRoutineBegin(snapshot) {
     cimg_names = [];
     response = null;
     has_responded = false;
-    slide_num = ((slideNum.toString().length === 1) ? `0${slideNum}` : slideNum.toString());
-    qn_num = ((qnNum.toString().length === 1) ? `0${qnNum}` : qnNum.toString());
+    replay_inst = true;
+    slide_num = slideNum;
+    qn_num = qnNum;
     slide = make_slide(slide_num);
     slide.autoDraw = true;
     cimgs = all_cimgs[slide_num]();
-    min_y = find_min_y(cimgs);
-    radio_y = (min_y - 0.05);
-    radio0s = [];
-    radio1s = [];
-    for (var cimg, _pj_c = 0, _pj_a = cimgs, _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
-        cimg = _pj_a[_pj_c];
-        cimg.autoDraw = true;
-        radio0s.push(make_radio0(cimg.name, [cimg.pos[0], radio_y]));
-        radio0s.slice((- 1))[0].autoDraw = true;
-        radio1s.push(make_radio1(cimg.name, [cimg.pos[0], radio_y]));
+    radio0s = make_radios(make_radio0, cimgs);
+    radio1s = make_radios(make_radio1, cimgs);
+    for (var i, _pj_c = 0, _pj_a = util.range(cimgs.length), _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
+        i = _pj_a[_pj_c];
+        cimgs[i].autoDraw = true;
+        radio0s[i].autoDraw = true;
     }
     REPLAY.autoDraw = true;
     NEXT.autoDraw = true;
     COVER.autoDraw = true;
     COVER.opacity = 0.9;
     if (USE_AUDIO) {
-        aud_file = `${AUD_DIR}/S-CLAS Q${qn_num}.m4a`;
+        aud_file = `${AUD_DIR}/S-CLAS ${qn_num}.m4a`;
         SOUND = make_sound("sound", aud_file);
         SOUND_DUR = SOUND.getDuration();
         SOUND_START = 0;
+        SLIDE_SOUND_START = 0;
         SOUND.play();
     }
     if (SHOW_DEBUG) {
@@ -616,6 +710,29 @@ function trialRoutineBegin(snapshot) {
             i = _pj_a[_pj_c];
             cimg_names.push(cimgs[i].name);
         }
+    }
+    
+    var _pj;
+    function _pj_snippets(container) {
+        function in_es6(left, right) {
+            if (((right instanceof Array) || ((typeof right) === "string"))) {
+                return (right.indexOf(left) > (- 1));
+            } else {
+                if (((right instanceof Map) || (right instanceof Set) || (right instanceof WeakMap) || (right instanceof WeakSet))) {
+                    return right.has(left);
+                } else {
+                    return (left in right);
+                }
+            }
+        }
+        container["in_es6"] = in_es6;
+        return container;
+    }
+    _pj = {};
+    _pj_snippets(_pj);
+    if ((USE_AUDIO && _pj.in_es6(qn_num, all_anims))) {
+        run_anim = true;
+        [aimgs, starts, ends] = all_anims[qn_num]();
     }
     
     // keep track of which components have finished
@@ -647,11 +764,18 @@ function trialRoutineEachFrame() {
                 continueRoutine = false;
             }
             if (REPLAY.contains(MOUSE)) {
+                if ((aimgs !== null)) {
+                    for (var aimg, _pj_c = 0, _pj_a = aimgs, _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
+                        aimg = _pj_a[_pj_c];
+                        aimg.autoDraw = false;
+                    }
+                }
                 if (((t - SOUND_START) < SOUND_DUR)) {
                     SOUND.stop();
                 }
                 SOUND = make_sound("sound", aud_file);
                 SOUND_START = t;
+                SLIDE_SOUND_START = t;
                 SOUND.play();
             }
             for (var i, _pj_c = 0, _pj_a = util.range(cimgs.length), _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
@@ -674,8 +798,10 @@ function trialRoutineEachFrame() {
             }
         }
     }
-    if (((SOUND_START === 0) && (t > SOUND_DUR))) {
-        SOUND = make_sound("sound", `${AUD_DIR}/Replay instructions.m4a`);
+    if ((replay_inst && (t > SOUND_DUR))) {
+        replay_inst = false;
+        SOUND = make_sound("sound", REPLAY_AUD_FILE);
+        SOUND_DUR = SOUND.getDuration();
         SOUND_START = t;
         SOUND.play();
     }
@@ -689,9 +815,20 @@ function trialRoutineEachFrame() {
     corrAns = ${corrAns}
     response = ${response}
     has_responded = ${has_responded}
-    min_y = ${round(min_y, 3)}
     t = ${round(t, 3)}`
     ;
+    }
+    
+    if (run_anim) {
+        for (var i, _pj_c = 0, _pj_a = util.range(aimgs.length), _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
+            i = _pj_a[_pj_c];
+            if (((t - SLIDE_SOUND_START) >= starts[i])) {
+                aimgs[i].autoDraw = true;
+            }
+            if (((t - SLIDE_SOUND_START) >= ends[i])) {
+                aimgs[i].autoDraw = false;
+            }
+        }
     }
     
     
@@ -768,6 +905,11 @@ function trialRoutineEnd() {
     psychoJS.experiment.addData("end_timestamp", util.MonotonicClock.getDateStr());
     psychoJS.experiment.addData("total_seconds", globalClock.getTime());
     
+    if (run_anim) {
+        run_anim = false;
+        aimgs = null;
+    }
+    
     // the Routine "trial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset();
     
@@ -812,6 +954,8 @@ async function quitPsychoJS(message, isCompleted) {
   if (psychoJS.experiment.isEntryEmpty()) {
     psychoJS.experiment.nextEntry();
   }
+  
+  
   
   
   
