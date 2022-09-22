@@ -13,7 +13,7 @@ const { round } = util;
 
 // store info about the experiment session:
 let expName = 'S-CLAS';  // from the Builder filename that created this script
-let expInfo = {'ID': '', 'Audio': ['Yes', 'No'], 'Debug': ['Yes', 'No']};
+let expInfo = {'ID': '', 'Audio': ['Yes', 'No'], 'Debug': ['No', 'Yes']};
 
 // Start code blocks for 'Before Experiment'
 
@@ -238,7 +238,7 @@ var routineTimer;
 async function experimentInit() {
   // Initialize components for Routine "begin"
   beginClock = new util.Clock();
-  expVersion = "2022.09.21";
+  expVersion = "2022.09.23";
   AUD_DIR = "resources/aud";
   IMGS_DIR = "resources/imgs";
   SLIDES_DIR = `${IMGS_DIR}/slides`;
@@ -246,7 +246,7 @@ async function experimentInit() {
   REPLAY_AUD_FILE = `${AUD_DIR}/Replay instructions.m4a`;
   USE_AUDIO = (expInfo["Audio"] === "Yes");
   SHOW_DEBUG = (expInfo["Debug"] === "Yes");
-  CLICK_BOX_OPACITY = (SHOW_DEBUG ? 0.5 : 0);
+  CLICK_BOX_OPACITY = (SHOW_DEBUG ? 0.2 : 0);
   /*
   Slides are 1052 x 745 pixels.
   Positions and sizes of clickable areas are hard
@@ -552,7 +552,6 @@ function beginRoutineEachFrame() {
     // update/draw components on each frame
     MOUSE_L = MOUSE.getPressed()[0];
     if ((MOUSE_L_prev !== MOUSE_L)) {
-        console.log(`MOUSE_L_prev = ${MOUSE_L_prev}; MOUSE_L = ${MOUSE_L}`);
         MOUSE_L_prev = MOUSE_L;
         if ((MOUSE_L && NEXT.contains(MOUSE))) {
             continueRoutine = false;
@@ -762,7 +761,6 @@ function trialRoutineEachFrame() {
     // update/draw components on each frame
     MOUSE_L = MOUSE.getPressed()[0];
     if ((MOUSE_L_prev !== MOUSE_L)) {
-        console.log(`MOUSE_L_prev = ${MOUSE_L_prev}; MOUSE_L = ${MOUSE_L}`);
         MOUSE_L_prev = MOUSE_L;
         if (MOUSE_L) {
             if ((has_responded && NEXT.contains(MOUSE))) {
